@@ -1,0 +1,43 @@
+POST http://localhost:8005/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+###
+
+POST http://localhost:8005/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+###
+
+GET http://localhost:8005/api/blogs
+Content-Type: application/json
+
+###
+
+GET http://localhost:8005/api/blogs?title=project
+Content-Type: application/json
+
+###
+
+GET http://localhost:8005/api/blogs?category=Technology
+Content-Type: application/json
+
+###
+
+GET http://localhost:8005/api/blogs?sortby=latest
+Content-Type: application/json
+
+###
+
+GET http://localhost:8005/api/blogs?sortby=oldest
+Content-Type: application/json
