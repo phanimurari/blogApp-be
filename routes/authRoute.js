@@ -232,17 +232,7 @@ router.get(
       req.user.refreshToken = refreshToken;
       await req.user.save();
 
-      // Set cookies
-      res.cookie('jwt_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000, // days to ms
-      });
-      res.cookie('refresh_token', refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: process.env.JWT_REFRESH_COOKIE_EXPIRE * 24 * 60 * 60 * 1000, // days to ms
-      });
+      console.log("success")
 
       // Redirect to the frontend
       res.redirect(process.env.CLIENT_URL || 'http://localhost:3000');
