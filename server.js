@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
 
 // Load environment variables
 dotenv.config();
@@ -21,6 +22,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(passport.initialize());
 
 // Routes

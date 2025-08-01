@@ -223,5 +223,3 @@ Creates a new blog post. Requires authentication.
     }' https://blogapp-be-veby.onrender.com/api/blogs
 
 
-
-https://blogapp-be-veby.onrender.com/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGI4Mzc0Y2FiNTI0MzQzZDZhMTEzOCIsImlhdCI6MTc1Mzk3MzYyMCwiZXhwIjoxNzUzOTc0NTIwfQ.wJm4G3xJ8w0KTmwVxBo7XM_QV9PBqz4BNdwLnEQvo-w&refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGI4Mzc0Y2FiNTI0MzQzZDZhMTEzOCIsImlhdCI6MTc1Mzk3MzYyMCwiZXhwIjoxNzU0NTc4NDIwfQ.nK-1dOjbF-im5qOJXexZ45uAkV9akx-FVrjXdCvNc_M

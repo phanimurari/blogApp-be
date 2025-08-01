@@ -57,17 +57,30 @@ router.post('/register', async (req, res, next) => {
     user.refreshToken = refreshToken;
     await user.save();
 
+    // Set tokens in secure, httpOnly cookies
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
-      token,
-      refreshToken,
       user: {
         id: user._id,
         username: user.username,
         email: user.email,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (error) {
     next(error);
@@ -117,17 +130,30 @@ router.post('/login', async (req, res, next) => {
     user.refreshToken = refreshToken;
     await user.save();
 
+    // Set tokens in secure, httpOnly cookies
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+
     res.status(200).json({
       success: true,
       message: 'Login successful',
-      token,
-      refreshToken,
       user: {
         id: user._id,
         username: user.username,
         email: user.email,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (error) {
     next(error);
@@ -172,16 +198,16 @@ router.get('/profile', auth([]), async (req, res, next) => {
 });
 
 // @route   POST /api/auth/refresh-token
-// @desc    Refresh access token
+// @desc    Refresh access token using httpOnly cookie
 // @access  Public
 router.post('/refresh-token', async (req, res, next) => {
   try {
-    const { refreshToken } = req.body;
+    const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: 'Refresh token is required'
+        message: 'Authentication error: No refresh token provided',
       });
     }
 
@@ -197,12 +223,19 @@ router.post('/refresh-token', async (req, res, next) => {
       });
     }
 
-    // Generate new access token
+    // Generate and set new access token
     const token = generateToken(user._id);
+
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
 
     res.status(200).json({
       success: true,
-      token
+      message: 'Access token refreshed successfully',
     });
   } catch (error) {
     next(error);
@@ -232,10 +265,26 @@ router.get(
       req.user.refreshToken = refreshToken;
       await req.user.save();
 
-      console.log("success")
+      // Set tokens in secure, httpOnly cookies
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
 
-      // Redirect to the frontend
-      res.redirect(process.env.CLIENT_URL || 'http://localhost:3000');
+      res.cookie('accessToken', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 60 * 1000, // 15 minutes
+      });
+
+      // Redirect to the frontend dashboard or a specific authenticated page
+      res.redirect(
+        `${process.env.CLIENT_URL}/dashboard` ||
+          'http://localhost:3000/dashboard'
+      );
     } catch (error) {
       console.error('Google callback error:', error);
       res.redirect(
@@ -244,5 +293,34 @@ router.get(
     }
   }
 );
+
+// @route   POST /api/auth/logout
+// @desc    Logout user and clear cookies
+// @access  Private
+router.post('/logout', auth([]), async (req, res, next) => {
+  try {
+    // Optionally, invalidate the refresh token in the database
+    const user = await User.findById(req.user.id);
+    if (user) {
+      user.refreshToken = null;
+      await user.save();
+    }
+
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    res.status(200).json({ success: true, message: 'Logged out successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
