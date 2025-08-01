@@ -4,7 +4,7 @@ This document provides instructions and examples for using the Blogs App API.
 
 ## Base URL
 
-`http://localhost:8005`
+`https://blogapp-be-veby.onrender.com`
 
 ---
 
@@ -34,7 +34,7 @@ Registers a new user in the system.
       "username": "testuser",
       "email": "test@example.com",
       "password": "password123"
-    }' http://localhost:8005/api/auth/register
+    }' https://blogapp-be-veby.onrender.com/api/auth/register
     ```
 
 ### Login User
@@ -58,7 +58,7 @@ Authenticates a user and returns a JWT token.
     curl -X POST -H "Content-Type: application/json" -d '{
       "email": "test@example.com",
       "password": "password123"
-    }' http://localhost:8005/api/auth/login
+    }' https://blogapp-be-veby.onrender.com/api/auth/login
     ```
 
 ### Get Current User
@@ -73,7 +73,7 @@ Retrieves the profile of the currently authenticated user.
 -   **cURL Example:**
 
     ```bash
-    curl -X GET -H "Authorization: Bearer <YOUR_JWT_TOKEN>" http://localhost:8005/api/auth/me
+    curl -X GET -H "Authorization: Bearer <YOUR_JWT_TOKEN>" https://blogapp-be-veby.onrender.com/api/auth/me
     ```
 
 ### Get User Profile
@@ -88,7 +88,7 @@ Retrieves the profile details of the authenticated user.
 -   **cURL Example:**
 
     ```bash
-    curl -X GET -H "Authorization: Bearer <YOUR_JWT_TOKEN>" http://localhost:8005/api/auth/profile
+    curl -X GET -H "Authorization: Bearer <YOUR_JWT_TOKEN>" https://blogapp-be-veby.onrender.com/api/auth/profile
     ```
 
 ---
@@ -101,7 +101,7 @@ Google authentication uses an OAuth 2.0 flow that requires a browser. You cannot
     Open the following URL in your browser to start the Google login process:
 
     ```
-    http://localhost:8005/api/auth/google
+    https://blogapp-be-veby.onrender.com/api/auth/google
     ```
 
 2.  **Callback:**
@@ -109,7 +109,7 @@ Google authentication uses an OAuth 2.0 flow that requires a browser. You cannot
 
     Example redirect URL:
     ```
-    http://localhost:8005/?token=<YOUR_JWT_TOKEN>&refreshToken=<YOUR_REFRESH_TOKEN>
+    https://blogapp-be-veby.onrender.com/?token=<YOUR_JWT_TOKEN>&refreshToken=<YOUR_REFRESH_TOKEN>
     ```
 
 ---
@@ -130,27 +130,27 @@ Retrieves a list of all blog posts.
 
     -   **Get all blogs:**
         ```bash
-        curl -X GET http://localhost:8005/api/blogs
+        curl -X GET https://blogapp-be-veby.onrender.com/api/blogs
         ```
     -   **Filter by title:**
         ```bash
-        curl -X GET http://localhost:8005/api/blogs?title=MERN
+        curl -X GET https://blogapp-be-veby.onrender.com/api/blogs?title=MERN
         ```
     -   **Filter by category:**
         ```bash
-        curl -X GET "http://localhost:8005/api/blogs?category=Technology"
+        curl -X GET "https://blogapp-be-veby.onrender.com/api/blogs?category=Technology"
         ```
     -   **Sort by latest:**
         ```bash
-        curl -X GET http://localhost:8005/api/blogs?sortby=latest
+        curl -X GET https://blogapp-be-veby.onrender.com/api/blogs?sortby=latest
         ```
     -   **Sort by oldest:**
         ```bash
-        curl -X GET http://localhost:8005/api/blogs?sortby=oldest
+        curl -X GET https://blogapp-be-veby.onrender.com/api/blogs?sortby=oldest
         ```
     -   **Combined query:**
         ```bash
-        curl -X GET "http://localhost:8005/api/blogs?category=Technology&sortby=latest"
+        curl -X GET "https://blogapp-be-veby.onrender.com/api/blogs?category=Technology&sortby=latest"
         ```
 
 - **Sample Response:**
@@ -187,7 +187,7 @@ Retrieves a single blog post by its ID.
 -   **cURL Example:**
 
     ```bash
-    curl -X GET http://localhost:8005/api/blogs/67e4e2e8b612d88403af3a0f
+    curl -X GET https://blogapp-be-veby.onrender.com/api/blogs/67e4e2e8b612d88403af3a0f
     ```
 
 ### Create a New Blog
@@ -220,8 +220,8 @@ Creates a new blog post. Requires authentication.
       "image": "https://example.com/image.png",
       "category": "Technology",
       "slug": "my-first-blog-post"
-    }' http://localhost:8005/api/blogs
+    }' https://blogapp-be-veby.onrender.com/api/blogs
 
 
 
-http://localhost:8005/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGI4Mzc0Y2FiNTI0MzQzZDZhMTEzOCIsImlhdCI6MTc1Mzk3MzYyMCwiZXhwIjoxNzUzOTc0NTIwfQ.wJm4G3xJ8w0KTmwVxBo7XM_QV9PBqz4BNdwLnEQvo-w&refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGI4Mzc0Y2FiNTI0MzQzZDZhMTEzOCIsImlhdCI6MTc1Mzk3MzYyMCwiZXhwIjoxNzU0NTc4NDIwfQ.nK-1dOjbF-im5qOJXexZ45uAkV9akx-FVrjXdCvNc_M
+https://blogapp-be-veby.onrender.com/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGI4Mzc0Y2FiNTI0MzQzZDZhMTEzOCIsImlhdCI6MTc1Mzk3MzYyMCwiZXhwIjoxNzUzOTc0NTIwfQ.wJm4G3xJ8w0KTmwVxBo7XM_QV9PBqz4BNdwLnEQvo-w&refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OGI4Mzc0Y2FiNTI0MzQzZDZhMTEzOCIsImlhdCI6MTc1Mzk3MzYyMCwiZXhwIjoxNzU0NTc4NDIwfQ.nK-1dOjbF-im5qOJXexZ45uAkV9akx-FVrjXdCvNc_M
