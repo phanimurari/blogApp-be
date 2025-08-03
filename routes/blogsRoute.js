@@ -40,7 +40,7 @@ router.get('/', async (req, res, next) => {
 // @route   GET /blogs/:id
 // @desc    Get a single blog
 // @access  Public
-router.get('/:id', auth([]), async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const blog = await Blog.findById(req.params.id).populate('userId', 'username');
     if (!blog) {
@@ -61,7 +61,7 @@ router.get('/:id', auth([]), async (req, res, next) => {
 // @route   POST /blogs
 // @desc    Create a new blog
 // @access  Private
-router.post('/', auth([ADMIN_ROLE]), async (req, res, next) => {
+router.post('/', auth(['admin']), async (req, res, next) => {
   try {
     const { title, content, image, category, slug } = req.body;
     const userId = req.user._id;
@@ -81,6 +81,31 @@ router.post('/', auth([ADMIN_ROLE]), async (req, res, next) => {
       success: true,
       message: 'Blog created successfully',
       data: blog,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /blogs/bulk
+// @desc    Create multiple new blogs
+// @access  Private
+router.post('/bulk', auth(['admin']), async (req, res, next) => {
+  try {
+    const blogsData = req.body;
+    const userId = req.user._id;
+
+    const blogs = blogsData.map((blog) => ({
+      ...blog,
+      userId,
+    }));
+
+    const createdBlogs = await Blog.insertMany(blogs);
+
+    res.status(201).json({
+      success: true,
+      message: 'Blogs created successfully',
+      data: createdBlogs,
     });
   } catch (error) {
     next(error);

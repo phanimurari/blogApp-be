@@ -7,11 +7,17 @@ const auth = (roles = []) => { // Define the auth middleware function that accep
   }
 
   return async (req, res, next) => { // Return an asynchronous middleware function
-    let token; // Declare a variable to store the token
+    let token;
 
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) { // Check if the authorization header exists and starts with 'Bearer'
-      token = req.headers.authorization.split(' ')[1]; // Extract the token from the authorization header
-    }
+// Check for token in httpOnly cookie first
+if (req.cookies.accessToken) {
+  token = req.cookies.accessToken;
+}
+// Fallback to Authorization header
+else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  token = req.headers.authorization.split(' ')[1];
+}
+
 
     if (!token) { // Check if the token exists
       return res.status(401).json({ // If not, return a 401 Unauthorized error

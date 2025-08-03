@@ -61,14 +61,14 @@ router.post('/register', async (req, res, next) => {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     res.cookie('accessToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'strict',
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
 
@@ -134,14 +134,14 @@ router.post('/login', async (req, res, next) => {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     res.cookie('accessToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'strict',
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
 
@@ -229,7 +229,7 @@ router.post('/refresh-token', async (req, res, next) => {
     res.cookie('accessToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'strict',
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
 
@@ -269,21 +269,20 @@ router.get(
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
+        sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
       res.cookie('accessToken', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
+        sameSite: 'strict',
         maxAge: 15 * 60 * 1000, // 15 minutes
       });
 
       // Redirect to the frontend dashboard or a specific authenticated page
       res.redirect(
-        `${process.env.CLIENT_URL}/dashboard` ||
-          'http://localhost:3000/dashboard'
+        `${process.env.DEVELOPMENT_ENV === 'developement'}` ? `${process.env.CLIENT_URL}` : `${process.env.DEPLOYED_URL}`
       );
     } catch (error) {
       console.error('Google callback error:', error);
@@ -309,12 +308,12 @@ router.post('/logout', auth([]), async (req, res, next) => {
     res.clearCookie('accessToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'strict',
     });
     res.clearCookie('refreshToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'strict',
     });
 
     res.status(200).json({ success: true, message: 'Logged out successfully' });
